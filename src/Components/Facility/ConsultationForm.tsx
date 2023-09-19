@@ -100,6 +100,8 @@ type FormDetails = {
   action?: string;
   assigned_to: string;
   assigned_to_object: UserModel | null;
+  staff_assigned_to: string;
+  staff_assigned_to_object: UserModel | null;
   special_instruction: string;
   review_interval: number;
   weight: string;
@@ -146,6 +148,8 @@ const initForm: FormDetails = {
   action: "NO_ACTION",
   assigned_to: "",
   assigned_to_object: null,
+  staff_assigned_to: "",
+  staff_assigned_to_object: null,
   special_instruction: "",
   review_interval: -1,
   weight: "",
@@ -339,6 +343,8 @@ export const ConsultationForm = (props: any) => {
             is_kasp: `${res.data.is_kasp}`,
             assigned_to: res.data.assigned_to || "",
             assigned_to_object: res.data.assigned_to_object,
+            staff_assigned_to: res.data.staff_assigned_to || "",
+            staff_assigned_to_object: res.data.staff_assigned_to_object,
             verified_by: res.data.verified_by || "",
             verified_by_object: res.data.verified_by_object,
             ett_tt: res.data.ett_tt ? Number(res.data.ett_tt) : 3,
@@ -700,6 +706,10 @@ export const ConsultationForm = (props: any) => {
         assigned_to:
           state.form.is_telemedicine.toString() === "true"
             ? state.form.assigned_to
+            : "",
+        staff_assigned_to:
+          state.form.is_telemedicine.toString() === "true"
+            ? state.form.staff_assigned_to
             : "",
         special_instruction: state.form.special_instruction,
         weight: Number(state.form.weight),
@@ -1365,21 +1375,39 @@ export const ConsultationForm = (props: any) => {
                           />
 
                           {JSON.parse(state.form.is_telemedicine) && (
-                            <div
-                              className="col-span-6 flex-[2]"
-                              ref={fieldRef["assigned_to"]}
-                            >
-                              <UserAutocompleteFormField
-                                showActiveStatus
-                                value={
-                                  state.form.assigned_to_object ?? undefined
-                                }
-                                onChange={handleDoctorSelect}
-                                userType={"Doctor"}
-                                name={"assigned_to"}
-                                label="Assigned to"
-                              />
-                            </div>
+                            <>
+                              <div
+                                className="col-span-6 flex-[2]"
+                                ref={fieldRef["assigned_to"]}
+                              >
+                                <UserAutocompleteFormField
+                                  showActiveStatus
+                                  value={
+                                    state.form.assigned_to_object ?? undefined
+                                  }
+                                  onChange={handleDoctorSelect}
+                                  userType={"Doctor"}
+                                  name={"assigned_to"}
+                                  label="Doctors assigned to"
+                                />
+                              </div>
+                              <div
+                                className="col-span-6 flex-[2]"
+                                ref={fieldRef["assigned_to"]}
+                              >
+                                <UserAutocompleteFormField
+                                  showActiveStatus
+                                  value={
+                                    state.form.staff_assigned_to_object ??
+                                    undefined
+                                  }
+                                  onChange={handleDoctorSelect}
+                                  userType={"Staff"}
+                                  name={"staff_assigned_to"}
+                                  label="Nurses assigned to"
+                                />
+                              </div>
+                            </>
                           )}
                         </>
                       )}
